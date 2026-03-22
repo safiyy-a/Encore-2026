@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 20 20" fill="none">
+        <path d="M10 3L17 7V13L10 17L3 13V7L10 3Z" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M10 8V12M8 10H12" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-text">encore</div>
+      <div class="logo-sub">Returns resell platform</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-pill"><div class="live-dot"></div>Live</div>
+    <span>Q1 2025 · Apr–Jun</span>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="nav-tabs">
+  <div class="tab active" onclick="setTab(this,'overview')">Overview</div>
+  <div class="tab" onclick="setTab(this,'items')">Items</div>
+  <div class="tab" onclick="setTab(this,'emissions')">Emissions</div>
+  <div class="tab" onclick="setTab(this,'forecast')">Forecast</div>
+</div>
+
+<div class="main panel active" id="overview-panel">
+
+  <!-- IMPACT TICKER -->
+  <div class="impact-ticker">
+    <div class="ticker-item">
+      <div class="ticker-val">14,382</div>
+      <div class="ticker-lbl">Items resold this quarter</div>
+    </div>
+    <div class="ticker-divider"></div>
+    <div class="ticker-item">
+      <div class="ticker-val">28.7 t</div>
+      <div class="ticker-lbl">CO₂ equivalent saved</div>
+    </div>
+    <div class="ticker-divider"></div>
+    <div class="ticker-item">
+      <div class="ticker-val">£182,440</div>
+      <div class="ticker-lbl">Retail value recovered</div>
+    </div>
+    <div class="ticker-divider"></div>
+    <div class="ticker-item">
+      <div class="ticker-val">67%</div>
+      <div class="ticker-lbl">Avg resell rate</div>
+    </div>
+    <div class="ticker-divider"></div>
+    <div class="ticker-item">
+      <div class="ticker-val">3.2 days</div>
+      <div class="ticker-lbl">Avg time to resell</div>
+    </div>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="section-label">Key metrics</div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-accent" style="background:var(--green-400)"></div>
+      <div class="kpi-label">Total returns processed</div>
+      <div class="kpi-value">21,504 <span class="kpi-unit">items</span></div>
+      <div class="kpi-delta delta-up">↑ 12% vs last quarter</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-accent" style="background:var(--teal-400)"></div>
+      <div class="kpi-label">Revenue recovered</div>
+      <div class="kpi-value">£182k</div>
+      <div class="kpi-delta delta-up">↑ 8.4% vs last quarter</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-accent" style="background:var(--blue-400)"></div>
+      <div class="kpi-label">Carbon saved (kg CO₂e)</div>
+      <div class="kpi-value">28,700 <span class="kpi-unit">kg</span></div>
+      <div class="kpi-delta delta-up">↑ 19% vs last quarter</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-accent" style="background:var(--amber-400)"></div>
+      <div class="kpi-label">Landfill diverted</div>
+      <div class="kpi-value">6,210 <span class="kpi-unit">kg</span></div>
+      <div class="kpi-delta delta-up">↑ 22% vs last quarter</div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW -->
+  <div class="charts-row">
+    <!-- Revenue + Volume chart -->
+    <div class="chart-card">
+      <div class="chart-title">
+        <span>Resell revenue & volume</span>
+        <div class="chart-period-toggle">
+          <div class="period-btn active" onclick="setPeriod(this,'weekly')">Wk</div>
+          <div class="period-btn" onclick="setPeriod(this,'monthly')">Mo</div>
+        </div>
+      </div>
+      <div style="position:relative;height:200px;width:100%">
+        <canvas id="revenueChart"></canvas>
+      </div>
+      <div style="display:flex;gap:20px;margin-top:12px">
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--color-text-secondary)"><span style="width:10px;height:10px;border-radius:2px;background:#3B6D11;display:inline-block"></span>Revenue (£)</span>
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--color-text-secondary)"><span style="width:10px;height:10px;border-radius:2px;background:#1D9E75;display:inline-block"></span>Units resold</span>
+      </div>
+    </div>
+
+    <!-- Resell outcome donut -->
+    <div class="chart-card">
+      <div class="chart-title"><span>Resell outcome split</span></div>
+      <div style="position:relative;height:160px;width:100%">
+        <canvas id="donutChart"></canvas>
+      </div>
+      <div class="donut-legend" style="margin-top:14px;flex-direction:row;flex-wrap:wrap;gap:8px 16px">
+        <span class="legend-item"><span class="legend-dot" style="background:#3B6D11"></span>Resold online 41%</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#1D9E75"></span>In-store 26%</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#9FE1CB"></span>Partner 14%</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#BA7517"></span>Repaired 12%</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#D3D1C7"></span>Recycled 7%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM ROW -->
+  <div class="bottom-row">
+    <!-- Top returned items -->
+    <div class="chart-card">
+      <div class="chart-title"><span>Top returned items</span></div>
+      <table class="returns-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Returns</th>
+            <th>Resell rate</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody id="items-table-body"></tbody>
+      </table>
+    </div>
+
+    <!-- Category breakdown -->
+    <div class="chart-card">
+      <div class="chart-title"><span>Returns by category</span></div>
+      <div class="cat-list" id="cat-list"></div>
+
+      <div style="margin-top:22px;border-top:0.5px solid var(--color-border-tertiary);padding-top:16px">
+        <div class="chart-title" style="margin-bottom:14px"><span>Carbon saved by category</span></div>
+        <div style="position:relative;height:130px;width:100%">
+          <canvas id="carbonBar"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ITEMS PANEL -->
+<div class="main panel" id="items-panel">
+  <div class="section-label">All returned items</div>
+  <div class="chart-card" style="margin-bottom: 28px;">
+    <table class="returns-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Category</th>
+          <th>Return Date</th>
+          <th>Retail Value</th>
+          <th>Resell Status</th>
+          <th>Resell Value</th>
+          <th>Carbon (kg)</th>
+          <th>Days to Resell</th>
+          <th>Reason</th>
+        </tr>
+      </thead>
+      <tbody id="all-items-table-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- EMISSIONS PANEL -->
+<div class="main panel" id="emissions-panel">
+  <div class="section-label">Carbon emission analysis</div>
+  
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-accent" style="background:var(--blue-400)"></div>
+      <div class="kpi-label">Total carbon saved</div>
+      <div class="kpi-value" id="total-carbon">0 <span class="kpi-unit">kg</span></div>
+      <div class="kpi-delta delta-up">↑ Vs manufacturing new</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-accent" style="background:var(--teal-400)"></div>
+      <div class="kpi-label">Avg per item</div>
+      <div class="kpi-value" id="avg-carbon">0 <span class="kpi-unit">kg</span></div>
+      <div class="kpi-delta">per resold item</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-accent" style="background:var(--green-400)"></div>
+      <div class="kpi-label">Landfill avoided</div>
+      <div class="kpi-value" id="landfill-avoided">0 <span class="kpi-unit">kg</span></div>
+      <div class="kpi-delta">of waste diverted</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-accent" style="background:var(--amber-400)"></div>
+      <div class="kpi-label">Top impact category</div>
+      <div id="top-carbon-cat" style="font-family:Fraunces;font-size:24px;font-weight:300;margin-bottom:6px;line-height:1">—</div>
+      <div class="kpi-delta">highest emissions saved</div>
+    </div>
+  </div>
+
+  <div class="charts-row" style="margin-top: 28px;">
+    <div class="chart-card">
+      <div class="chart-title"><span>Carbon distribution by return reason</span></div>
+      <div style="position:relative;height:200px;width:100%">
+        <canvas id="carbonReasonChart"></canvas>
+      </div>
+    </div>
+    
+    <div class="chart-card">
+      <div class="chart-title"><span>Resale impact by status</span></div>
+      <div style="position:relative;height:200px;width:100%">
+        <canvas id="carbonStatusChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FORECAST PANEL -->
+<div class="main panel" id="forecast-panel">
+  <div class="section-label">Q2 2025 Forecast</div>
+  
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-accent" style="background:var(--green-400)"></div>
+      <div class="kpi-label">Projected returns</div>
+      <div class="kpi-value">24,500 <span class="kpi-unit">items</span></div>
+      <div class="kpi-delta delta-up">↑ 14% vs Q1</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-accent" style="background:var(--teal-400)"></div>
+      <div class="kpi-label">Revenue forecast</div>
+      <div class="kpi-value">£218k</div>
+      <div class="kpi-delta delta-up">↑ 20% vs Q1</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-accent" style="background:var(--blue-400)"></div>
+      <div class="kpi-label">Carbon projected</div>
+      <div class="kpi-value">34,200 <span class="kpi-unit">kg</span></div>
+      <div class="kpi-delta delta-up">↑ 19% savings</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-accent" style="background:var(--amber-400)"></div>
+      <div class="kpi-label">Expected resell rate</div>
+      <div class="kpi-value">69%</div>
+      <div class="kpi-delta delta-up">↑ 2% improvement</div>
+    </div>
+  </div>
+
+  <div class="charts-row" style="margin-top: 28px;">
+    <div class="chart-card">
+      <div class="chart-title"><span>Revenue forecast (by month)</span></div>
+      <div style="position:relative;height:200px;width:100%">
+        <canvas id="forecastRevenueChart"></canvas>
+      </div>
+    </div>
+    
+    <div class="chart-card">
+      <div class="chart-title"><span>Volume forecast vs actuals</span></div>
+      <div style="position:relative;height:200px;width:100%">
+        <canvas id="forecastVolumeChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-card" style="margin-top: 28px;">
+    <div class="chart-title"><span>Category growth projection</span></div>
+    <div class="cat-list" id="forecast-cat-list"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+const textColor = isDark ? '#b4b2a9' : '#73726c';
+
+// ── DATA ──────────────────────────────────────────────────
+
+var data = $.csv.toObjects('data/returns.csv');
+
+
+// let weeklyRevenue = [8200,9400,7800,11200,10400,13500,12100,14200,9900,11800,13000,15400];
+let weeklyRevenue = data.map(row => parseFloat(row.retail_value));
+
+let weeklyUnits   = [310,370,290,440,400,530,470,550,380,455,500,590];
+let monthlyRevenue = [42000,48500,56700,63800];
+let monthlyUnits   = [1580,1820,2140,2420];
+let topItems = [];
+let categories = [];
+let carbonSaved = [];
+
+// ── PARSE CSV ─────────────────────────────────────────────
+async function loadCSVData() {
+  try {
+    const response = await fetch('data/returns.csv');
+    const csvText = await response.text();
+    const rows = csvText.trim().split('\n').slice(1); // skip header
+    
+    // Parse rows
+    const data = rows.map(row => {
+      const [item_name, category, return_date, retail_value, resell_status, resell_value, carbon_kg, days_to_resell, return_reason] = row.split(',');
+      return {
+        item_name,
+        category,
+        return_date,
+        retail_value: parseFloat(retail_value),
+        resell_status,
+        resell_value: resell_value ? parseFloat(resell_value) : 0,
+        carbon_kg: parseFloat(carbon_kg),
+        days_to_resell: days_to_resell ? parseInt(days_to_resell) : 0,
+        return_reason,
+      };
+    });
+    
+    // Generate top items
+    const itemCounts = {};
+    data.forEach(row => {
+      if (!itemCounts[row.item_name]) {
+        itemCounts[row.item_name] = {
+          name: row.item_name,
+          cat: row.category,
+          returns: 0,
+          totalRetail: 0,
+          resoldCount: 0,
+          totalValue: 0,
+        };
+      }
+      itemCounts[row.item_name].returns += 1;
+      itemCounts[row.item_name].totalRetail += row.retail_value;
+      if (row.resell_status === 'resold') {
+        itemCounts[row.item_name].resoldCount += 1;
+        itemCounts[row.item_name].totalValue += row.resell_value;
+      }
+    });
+    
+    topItems = Object.values(itemCounts)
+      .map(item => ({
+        ...item,
+        rate: Math.round((item.resoldCount / item.returns) * 100),
+        value: '£' + Math.round(item.totalValue / 1000) + 'k'
+      }))
+      .sort((a, b) => b.returns - a.returns)
+      .slice(0, 6);
+    
+    // Generate categories
+    const catMap = {};
+    const colorMap = {
+      'Outerwear': '#3B6D11',
+      'Footwear': '#1D9E75',
+      'Dresses': '#BA7517',
+      'Denim': '#378ADD',
+      'Knitwear': '#D85A30',
+      'Trousers': '#9FE1CB',
+      'Tops': '#BA7517',
+      'Accessories': '#888780',
+    };
+    
+    data.forEach(row => {
+      if (!catMap[row.category]) {
+        catMap[row.category] = { name: row.category, count: 0, carbon: 0, color: colorMap[row.category] || '#888780' };
+      }
+      catMap[row.category].count += 1;
+      catMap[row.category].carbon += row.carbon_kg;
+    });
+    
+    const totalItems = data.length;
+    categories = Object.values(catMap)
+      .map(cat => ({
+        name: cat.name,
+        pct: Math.round((cat.count / totalItems) * 100),
+        color: cat.color,
+        carbon: Math.round(cat.carbon)
+      }))
+      .sort((a, b) => b.pct - a.pct);
+    
+    carbonSaved = categories.map(c => c.carbon);
+    
+    renderDashboard();
+  } catch (error) {
+    console.error('Error loading CSV:', error);
+  }
+}
+
+// Load CSV on page load
+document.addEventListener('DOMContentLoaded', loadCSVData);
+
+// Global chart references
+let revChart, donutChart, carbonChart;
+
+// ── RENDER DASHBOARD ─────────────────────────────────────
+function renderDashboard() {
+// ── RENDER TABLE ──────────────────────────────────────────
+const tbody = document.getElementById('items-table-body');
+tbody.innerHTML = ''; // Clear existing
+topItems.forEach((it,i) => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><span class="rank-num">${i+1}</span>${it.name}</td>
+    <td>${it.returns.toLocaleString()}</td>
+    <td>
+      <div class="resell-bar-wrap">
+        <div class="resell-bar-bg"><div class="resell-bar-fill" style="width:${it.rate}%"></div></div>
+        ${it.rate}%
+      </div>
+    </td>
+    <td style="color:var(--color-text-primary)">${it.value}</td>
+  `;
+  tbody.appendChild(tr);
+});
+
+// ── RENDER CATEGORIES ─────────────────────────────────────
+const catList = document.getElementById('cat-list');
+catList.innerHTML = '';
+categories.forEach(c => {
+  catList.innerHTML += `
+    <div class="cat-row">
+      <div class="cat-header">
+        <span class="cat-name">${c.name}</span>
+        <span class="cat-pct">${c.pct}%</span>
+      </div>
+      <div class="cat-track">
+        <div class="cat-fill" style="width:${c.pct}%;background:${c.color}"></div>
+      </div>
+    </div>
+  `;
+});
+
+// ── REVENUE CHART ─────────────────────────────────────────
+if (revChart) revChart.destroy();
+const revCtx = document.getElementById('revenueChart').getContext('2d');
+revChart = new Chart(revCtx, {
+  data: {
+    labels: ['Apr 1','Apr 8','Apr 15','Apr 22','Apr 29','May 6','May 13','May 20','May 27','Jun 3','Jun 10','Jun 17'],
+    datasets: [
+      {
+        type:'bar',
+        label:'Revenue (£)',
+        data: weeklyRevenue,
+        backgroundColor: isDark ? 'rgba(59,109,17,0.7)' : 'rgba(59,109,17,0.75)',
+        borderRadius: 4,
+        yAxisID:'y',
+      },
+      {
+        type:'line',
+        label:'Units resold',
+        data: weeklyUnits,
+        borderColor:'#1D9E75',
+        backgroundColor:'transparent',
+        borderWidth:2,
+        pointRadius:3,
+        pointBackgroundColor:'#1D9E75',
+        tension:0.4,
+        yAxisID:'y2',
+      }
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false}, tooltip:{mode:'index',intersect:false} },
+    scales:{
+      x:{ grid:{color:gridColor}, ticks:{color:textColor,font:{size:10},maxTicksLimit:6} },
+      y:{ grid:{color:gridColor}, ticks:{color:textColor,font:{size:10},callback:v=>'£'+Math.round(v/1000)+'k'} },
+      y2:{ position:'right', grid:{display:false}, ticks:{color:textColor,font:{size:10}} }
+    }
+  }
+});
+
+// ── DONUT ─────────────────────────────────────────────────
+if (donutChart) donutChart.destroy();
+const dCtx = document.getElementById('donutChart').getContext('2d');
+donutChart = new Chart(dCtx, {
+  type:'doughnut',
+  data:{
+    labels:['Resold online','In-store','Partner','Repaired','Recycled'],
+    datasets:[{
+      data:[41,26,14,12,7],
+      backgroundColor:['#3B6D11','#1D9E75','#9FE1CB','#BA7517','#D3D1C7'],
+      borderWidth:0,
+      hoverOffset:4,
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    cutout:'70%',
+    plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.raw+'%'}} }
+  }
+});
+
+// ── CARBON BAR ────────────────────────────────────────────
+if (carbonChart) carbonChart.destroy();
+const cbCtx = document.getElementById('carbonBar').getContext('2d');
+carbonChart = new Chart(cbCtx, {
+  type:'bar',
+  data:{
+    labels: categories.map(c=>c.name),
+    datasets:[{
+      data: carbonSaved,
+      backgroundColor: categories.map(c=>c.color+'cc'),
+      borderRadius:4,
+    }]
+  },
+  options:{
+    indexAxis:'y',
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>ctx.raw.toLocaleString()+' kg CO₂e'}} },
+    scales:{
+      x:{ grid:{color:gridColor}, ticks:{color:textColor,font:{size:10},callback:v=>v/1000+'t'} },
+      y:{ grid:{display:false}, ticks:{color:textColor,font:{size:10}} }
+    }
+  }
+});
+}
+
+// ── ITEMS PANEL ────────────────────────────────────────────
+function renderItemsPanel() {
+  const tbody = document.getElementById('all-items-table-body');
+  tbody.innerHTML = '';
+  
+  // Fetch and display all CSV items
+  fetch('data/returns.csv')
+    .then(r => r.text())
+    .then(csv => {
+      const rows = csv.trim().split('\n').slice(1);
+      rows.forEach((row, idx) => {
+        const [item_name, category, return_date, retail_value, resell_status, resell_value, carbon_kg, days_to_resell, return_reason] = row.split(',');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item_name}</td>
+          <td>${category}</td>
+          <td>${return_date}</td>
+          <td>£${parseFloat(retail_value).toFixed(2)}</td>
+          <td><span style="display:inline-block;padding:2px 8px;background:${resell_status==='resold'?'var(--green-50)':resell_status==='in-store'?'var(--blue-50)':resell_status==='partner'?'var(--teal-50)':'var(--coral-50)'},color:${resell_status==='resold'?'var(--green-600)':resell_status==='in-store'?'var(--blue-600)':resell_status==='partner'?'var(--teal-600)':'var(--coral-600)'},border-radius:4px;font-size:10px;font-weight:500">${resell_status}</span></td>
+          <td>${resell_value ? '£'+parseFloat(resell_value).toFixed(2) : '—'}</td>
+          <td>${carbon_kg}</td>
+          <td>${days_to_resell || '—'}</td>
+          <td>${return_reason}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    });
+}
+
+// ── EMISSIONS PANEL ────────────────────────────────────────
+function renderEmissionsPanel() {
+  fetch('data/returns.csv')
+    .then(r => r.text())
+    .then(csv => {
+      const rows = csv.trim().split('\n').slice(1);
+      const data = rows.map(row => {
+        const [item_name, category, return_date, retail_value, resell_status, resell_value, carbon_kg, days_to_resell, return_reason] = row.split(',');
+        return { carbon_kg: parseFloat(carbon_kg), resell_status, return_reason };
+      });
+      
+      const totalCarbon = data.reduce((sum, d) => sum + d.carbon_kg, 0);
+      const resoldCount = data.filter(d => d.resell_status === 'resold').length;
+      const avgCarbon = resoldCount > 0 ? (totalCarbon / resoldCount).toFixed(1) : 0;
+      
+      document.getElementById('total-carbon').innerHTML = Math.round(totalCarbon) + ' <span class="kpi-unit">kg</span>';
+      document.getElementById('avg-carbon').innerHTML = avgCarbon + ' <span class="kpi-unit">kg</span>';
+      document.getElementById('landfill-avoided').innerHTML = Math.round(totalCarbon * 0.85) + ' <span class="kpi-unit">kg</span>';
+      
+      // Find top category by carbon
+      const catCarbon = {};
+      data.forEach(d => {
+        const reason = d.return_reason;
+        if (!catCarbon[reason]) catCarbon[reason] = 0;
+        catCarbon[reason] += d.carbon_kg;
+      });
+      const topReason = Object.entries(catCarbon).sort((a,b) => b[1] - a[1])[0];
+      if (topReason) {
+        document.getElementById('top-carbon-cat').textContent = topReason[0].charAt(0).toUpperCase() + topReason[0].slice(1);
+      }
+      
+      // Carbon by reason chart
+      renderCarbonReasonChart(catCarbon);
+      
+      // Carbon by status chart
+      const statusCarbon = {};
+      data.forEach(d => {
+        if (!statusCarbon[d.resell_status]) statusCarbon[d.resell_status] = 0;
+        statusCarbon[d.resell_status] += d.carbon_kg;
+      });
+      renderCarbonStatusChart(statusCarbon);
+    });
+}
+
+// ── FORECAST PANEL ────────────────────────────────────────
+function renderForecastPanel() {
+  // Generate category growth forecast
+  const forecastList = document.getElementById('forecast-cat-list');
+  forecastList.innerHTML = '';
+  
+  const forecastData = [
+    { name: 'Outerwear', current: 28, projected: 31, color: '#3B6D11' },
+    { name: 'Footwear', current: 22, projected: 24, color: '#1D9E75' },
+    { name: 'Dresses', current: 18, projected: 20, color: '#BA7517' },
+    { name: 'Denim', current: 14, projected: 15, color: '#378ADD' },
+    { name: 'Knitwear', current: 11, projected: 7, color: '#D85A30' },
+    { name: 'Other', current: 7, projected: 3, color: '#888780' },
+  ];
+  
+  forecastData.forEach(item => {
+    forecastList.innerHTML += `
+      <div class="cat-row">
+        <div class="cat-header">
+          <span class="cat-name">${item.name}</span>
+          <span class="cat-pct" style="font-size:10px"><span style="color:var(--color-text-secondary)">${item.current}%</span> → <span style="color:var(--green-600);font-weight:500">${item.projected}%</span></span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="cat-track" style="flex:1">
+            <div class="cat-fill" style="width:${item.current}%;background:${item.color}80"></div>
+          </div>
+          <div class="cat-track" style="flex:1">
+            <div class="cat-fill" style="width:${item.projected}%;background:${item.color}"></div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  
+  // Revenue forecast chart
+  renderForecastRevenueChart();
+  
+  // Volume forecast chart
+  renderForecastVolumeChart();
+}
+
+// ── CARBON CHARTS ──────────────────────────────────────────
+let carbonReasonChart, carbonStatusChart;
+
+function renderCarbonReasonChart(data) {
+  if (carbonReasonChart) carbonReasonChart.destroy();
+  const ctx = document.getElementById('carbonReasonChart').getContext('2d');
+  carbonReasonChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: Object.keys(data),
+      datasets: [{
+        data: Object.values(data),
+        backgroundColor: '#1D9E75',
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.raw.toFixed(1) + ' kg' } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: textColor, font: { size: 10 } } },
+        y: { grid: { color: gridColor }, ticks: { color: textColor, font: { size: 10 }, callback: v => v.toLocaleString() } }
+      }
+    }
+  });
+}
+
+function renderCarbonStatusChart(data) {
+  if (carbonStatusChart) carbonStatusChart.destroy();
+  const ctx = document.getElementById('carbonStatusChart').getContext('2d');
+  carbonStatusChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: Object.keys(data).map(k => k.charAt(0).toUpperCase() + k.slice(1)),
+      datasets: [{
+        data: Object.values(data),
+        backgroundColor: ['#3B6D11', '#1D9E75', '#BA7517', '#D3D1C7', '#999'],
+        borderWidth: 0,
+        hoverOffset: 4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      cutout: '70%',
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.raw.toFixed(1) + ' kg' } } }
+    }
+  });
+}
+
+// ── FORECAST CHARTS ────────────────────────────────────────
+let forecastRevChart, forecastVolChart;
+
+function renderForecastRevenueChart() {
+  if (forecastRevChart) forecastRevChart.destroy();
+  const ctx = document.getElementById('forecastRevenueChart').getContext('2d');
+  forecastRevChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Jul', 'Aug', 'Sep'],
+      datasets: [{
+        label: 'Actual',
+        data: [63800, 58000, 62300],
+        borderColor: '#1D9E75',
+        backgroundColor: 'rgba(29,158,117,0.1)',
+        borderWidth: 2,
+        pointRadius: 4,
+        pointBackgroundColor: '#1D9E75',
+        tension: 0.4,
+        fill: true,
+      }, {
+        label: 'Forecast',
+        data: [68900, 71200, 74500],
+        borderColor: '#378ADD',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        borderDash: [5, 5],
+        pointRadius: 4,
+        pointBackgroundColor: '#378ADD',
+        tension: 0.4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true }, tooltip: { mode: 'index', intersect: false } },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { color: textColor, font: { size: 10 } } },
+        y: { grid: { color: gridColor }, ticks: { color: textColor, font: { size: 10 }, callback: v => '£' + Math.round(v/1000) + 'k' } }
+      }
+    }
+  });
+}
+
+function renderForecastVolumeChart() {
+  if (forecastVolChart) forecastVolChart.destroy();
+  const ctx = document.getElementById('forecastVolumeChart').getContext('2d');
+  forecastVolChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Jul', 'Aug', 'Sep'],
+      datasets: [{
+        label: 'Actual',
+        data: [2420, 2280, 2390],
+        backgroundColor: 'rgba(29,158,117,0.8)',
+        borderRadius: 4,
+      }, {
+        label: 'Forecast',
+        data: [2650, 2740, 2860],
+        backgroundColor: 'rgba(55,138,221,0.6)',
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true }, tooltip: { mode: 'index' } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: textColor, font: { size: 10 } } },
+        y: { grid: { color: gridColor }, ticks: { color: textColor, font: { size: 10 } } }
+      }
+    }
+  });
+}
+
+// ── PERIOD TOGGLE ─────────────────────────────────────────
+function setPeriod(btn, period) {
+  document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(period === 'weekly') {
+    revChart.data.labels = ['Apr 1','Apr 8','Apr 15','Apr 22','Apr 29','May 6','May 13','May 20','May 27','Jun 3','Jun 10','Jun 17'];
+    revChart.data.datasets[0].data = weeklyRevenue;
+    revChart.data.datasets[1].data = weeklyUnits;
+  } else {
+    revChart.data.labels = ['April','May','June','July'];
+    revChart.data.datasets[0].data = monthlyRevenue;
+    revChart.data.datasets[1].data = monthlyUnits;
+  }
+  revChart.update();
+}
+
+// ── TABS ───────────────────────────────────────────────────
+function setTab(el, id) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(id + '-panel').classList.add('active');
+  
+  if(id === 'items') renderItemsPanel();
+  if(id === 'emissions') renderEmissionsPanel();
+  if(id === 'forecast') renderForecastPanel();
+}
+</script>
+
+</body>
+</html>
